@@ -8,7 +8,11 @@ const Products = () => {
 		<div>
 			<div>
 				<Typography variant='h5'>Produtos</Typography>
-				<Button variant='contained'>Adicionar novo</Button>	
+				<Button 
+					variant='contained'
+		            href='/products/create'>
+						Adicionar novo
+				</Button>	
 			</div>
 			<ProductBasic />
 		</div>
