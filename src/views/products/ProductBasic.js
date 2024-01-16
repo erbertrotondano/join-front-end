@@ -14,6 +14,7 @@ const ProductBasic = () => {
         items.data.map(async (product) => (
           <Product
             key={product.id}
+            id={product.id}
             name={product.nome_produto}
             description={product.description}
             price={product.valor_produto}
