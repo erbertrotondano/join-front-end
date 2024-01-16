@@ -6,7 +6,7 @@ import Button from '@mui/material/Button'
 const Products = () => {
 	return (
 		<div>
-			<div>
+			<div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
 				<Typography variant='h5'>Produtos</Typography>
 				<Button 
 					variant='contained'
