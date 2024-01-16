@@ -58,8 +58,7 @@ const CardHorizontalRatings = () => {
               <Typography variant='body2'>5 Star | 98 reviews</Typography>
             </Box>
             <Typography variant='body2' sx={{ marginBottom: 4 }}>
-              Before there was a United States of America, there were coffee houses, because how are you supposed to
-              build.
+              Before 
             </Typography>
           </CardContent>
           <CardActions className='card-action-dense' sx={{ width: '100%' }}>

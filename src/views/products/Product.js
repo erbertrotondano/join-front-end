@@ -1,26 +1,31 @@
-// ** MUI Imports
-import Card from '@mui/material/Card'
-import Grid from '@mui/material/Grid'
-import { styled } from '@mui/material/styles'
-import Typography from '@mui/material/Typography'
-import Box from '@mui/material/Box'
-import CardContent from '@mui/material/CardContent'
+import Box from '@mui/material/Box';
+import React from 'react';
+import Card from '@mui/material/Card';
+import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
+import CardContent from '@mui/material/CardContent';
+import CardActions from '@mui/material/CardActions';
+import Button from '@mui/material/Button';
 
-const Product = ({name, description, price}) => {
-	return (
-	        <Card style={{marginTop: 15}}>
-		      <Grid container spacing={6}>
-		        <Grid item xs={12} sm={7}>
-		          <CardContent sx={{ padding: theme => `${theme.spacing(3.25, 5.75, 6.25)} !important` }}>
-		            <Typography variant='h6' sx={{ marginBottom: 3.5 }}>
-		              {name}
-		            </Typography>
-		            <Typography variant='body2'>
-		              {description}
-		            </Typography>
-		          </CardContent>
-		        </Grid>
-		        <Grid
+const Product = ({ name, description, price }) => {
+  return (
+    <Card style={{ marginTop: 15 }}>
+      <Grid container spacing={6}>
+        <Grid item xs={12} sm={7} sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+          <CardContent sx={{ padding: theme => `${theme.spacing(3.25, 5.75, 6.25)} !important'` }}>
+            <Typography variant='h6' sx={{ marginBottom: 3.5 }}>
+              {name}
+            </Typography>
+            <Typography variant='body2'>
+              {description}
+            </Typography>
+          </CardContent>
+          <CardActions className='card-action-dense'>
+            <Button>Editar</Button>
+            <Button>Remover</Button>
+          </CardActions>
+        </Grid>
+        <Grid
 		          item
 		          sm={5}
 		          xs={12}
@@ -38,7 +43,7 @@ const Product = ({name, description, price}) => {
 		            }}
 		          >
 		            <Box>
-		              <Box sx={{ mb: 3.5, display: 'flex', alignItems: 'flex-end', justifyContent: 'center' }}>
+		              <Box sx={{display: 'flex', alignItems: 'flex-end', justifyContent: 'center' }}>
 		                <Typography variant='h6'>R$</Typography>
 		                <Typography variant='h6' sx={{ lineHeight: 1, fontWeight: 600, fontSize: '3.75rem !important' }}>
 		                  {price}
@@ -47,9 +52,9 @@ const Product = ({name, description, price}) => {
 		            </Box>
 		          </CardContent>
 		        </Grid>
-		      </Grid>
-		    </Card>
-	)
+      </Grid>
+    </Card>
+  );
 }
 
-export default Product
+export default Product;

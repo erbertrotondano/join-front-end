@@ -34,7 +34,6 @@ const ProductBasic = () => {
     };
 
     renderAndSetProducts();
-    console.log(products);
   }, [items]);
 
   return (
