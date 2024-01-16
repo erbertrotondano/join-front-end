@@ -29,7 +29,7 @@ const navigation = () => {
     {
       title: 'Categorias de Produtos',
       icon: Table,
-      path: '/pages/register'
+      path: '/product-categories'
     },
     {
       sectionTitle: 'User Interface'
