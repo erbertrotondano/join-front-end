@@ -1,11 +1,15 @@
 import React from 'react'
 import ProductBasic from 'src/views/products/ProductBasic'
 import Typography from '@mui/material/Typography'
+import Button from '@mui/material/Button'
 
 const Products = () => {
 	return (
 		<div>
-			<Typography variant='h5'>Produtos</Typography>
+			<div>
+				<Typography variant='h5'>Produtos</Typography>
+				<Button variant='contained'>Adicionar novo</Button>	
+			</div>
 			<ProductBasic />
 		</div>
 	)
