@@ -15,7 +15,6 @@ const Product = ({ id, name, description, price }) => {
 	const { data: items, httpConfig, loading, error } = useFetch(url);
 	const handleDeleteBtn = (e) => {
 		const product = {id}
-		console.log(product)
     	httpConfig(product, 'DELETE')
     	window.location.reload(false);
 	} 
