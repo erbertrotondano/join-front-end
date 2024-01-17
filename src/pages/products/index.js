@@ -1,5 +1,7 @@
-import React from 'react'
+// ** Components Imports
 import ProductBasic from 'src/views/products/ProductBasic'
+
+// ** MUI Imports
 import Typography from '@mui/material/Typography'
 import Button from '@mui/material/Button'
 

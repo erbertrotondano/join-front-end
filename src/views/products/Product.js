@@ -1,13 +1,16 @@
-import Box from '@mui/material/Box';
+// ** React imports
 import React, { useState, useEffect } from 'react';
-import Card from '@mui/material/Card';
-import Grid from '@mui/material/Grid';
-import Typography from '@mui/material/Typography';
-import CardContent from '@mui/material/CardContent';
-import CardActions from '@mui/material/CardActions';
-import Button from '@mui/material/Button';
 import { useFetch } from '../../../src/hooks/useFetch';
 import { useRouter } from 'next/router';
+
+// ** MUI Imports
+import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import CardActions from '@mui/material/CardActions';
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
 
 const Product = ({ id, name, description, price, category }) => {
   const router = useRouter();

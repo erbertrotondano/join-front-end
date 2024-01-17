@@ -1,5 +1,7 @@
+// ** Components Imports
 import CreateProductBasic from 'src/views/products/CreateProductBasic'
-import Typography from '@mui/material/Typography'
+
+// ** React imports
 import { useRouter } from 'next/router';
 
 const EditProductsPage = () => {

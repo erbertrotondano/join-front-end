@@ -1,10 +1,12 @@
+// ** MUI Imports
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import Button from '@mui/material/Button'
+import Divider from '@mui/material/Divider'
 import { useFetch } from '../../../src/hooks/useFetch'
 import { useRouter } from 'next/router'
 import { useState } from 'react';
-import Divider from '@mui/material/Divider'
+
 
 const Category = ({id, name, isLastItem}) => {
 	const router = useRouter();

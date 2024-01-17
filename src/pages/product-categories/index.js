@@ -1,5 +1,7 @@
-import React from 'react'
+// ** Components Imports
 import CategoryBasic from 'src/views/product-categories/CategoryBasic'
+
+// ** MUI Imports
 import Typography from '@mui/material/Typography'
 import Button from '@mui/material/Button'
 

@@ -1,24 +1,16 @@
-import React from 'react'
-import Category from './Category'
+// ** React imports
 import { useState, useEffect } from 'react';
 import { useFetch } from '../../../src/hooks/useFetch';
 
-// ** MUI Imports
-import Box from '@mui/material/Box'
-import Card from '@mui/material/Card'
-import Avatar from '@mui/material/Avatar'
-import Typography from '@mui/material/Typography'
-import IconButton from '@mui/material/IconButton'
-import CardHeader from '@mui/material/CardHeader'
-import CardContent from '@mui/material/CardContent'
-import Button from '@mui/material/Button'
+// ** Components Imports
+import Category from './Category'
 
+// ** MUI Imports
+import Card from '@mui/material/Card'
+import CardContent from '@mui/material/CardContent'
 
 // ** Icons Imports
 import ChevronUp from 'mdi-material-ui/ChevronUp'
-import ChevronDown from 'mdi-material-ui/ChevronDown'
-import DotsVertical from 'mdi-material-ui/DotsVertical'
-
 
 const CategoryBasic = () => {
 

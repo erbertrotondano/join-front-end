@@ -1,7 +1,11 @@
-import Product from './Product';
-import Grid from '@mui/material/Grid';
+// ** React imports
 import { useState, useEffect } from 'react';
 import { useFetch } from '../../../src/hooks/useFetch';
+// ** Components Imports
+import Product from './Product';
+// ** MUI Imports
+import Grid from '@mui/material/Grid';
+// ** Icons Imports
 
 const ProductBasic = () => {
   const url = "http://localhost:80/api/v1/products";

@@ -1,5 +1,6 @@
+// ** Components Imports
 import CreateCategoryBasic from 'src/views/product-categories/CreateCategoryBasic'
-import Typography from '@mui/material/Typography'
+// ** React imports
 import { useRouter } from 'next/router'
 
 const CreateCategoriesPage = () => {
