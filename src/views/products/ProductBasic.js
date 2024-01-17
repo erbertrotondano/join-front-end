@@ -16,7 +16,7 @@ const ProductBasic = () => {
             key={product.id}
             id={product.id}
             name={product.nome_produto}
-            description={product.description}
+            description={product.descricao_produto}
             price={product.valor_produto}
             category={product.id_categoria_produto}
           />

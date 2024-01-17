@@ -49,7 +49,8 @@ const CreateProductBasic = ({ id, name, description, price, category, method = '
     const product = {
       nome_produto: productName,
       valor_produto: productPrice.replace(/\D/g, ''),
-      id_categoria_produto: selectedCategory
+      id_categoria_produto: selectedCategory,
+      descricao_produto: productDescription
     };
     if(requestMethod === 'PUT'){
       product.id = id;
