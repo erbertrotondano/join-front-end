@@ -16,7 +16,7 @@ const CategoryBasic = () => {
 
 	const url = "http://localhost:80/api/v1/product-categories";
 	const [categories, setCategories] = useState([]);
-	const [listUpdated, setListUpdated] = useState(false);
+	const [updateEffect, setUpdateEffect] = useState(false);
 
 	const renderList = () => {
 		console.log(categories)
@@ -28,7 +28,9 @@ const CategoryBasic = () => {
 					<Category 
 	      		key={category.id}
 	        	id={category.id}
+	        	onUpdateEffect={() => setUpdateEffect(true)}
 	        	name={category.nome_categoria}
+
 	        	isLastItem={index === categories.length - 1}
 	        />
 			))
@@ -46,14 +48,14 @@ const CategoryBasic = () => {
 	    		.get('product-categories')
 	    		.then((response) => { 
 	    			setCategories(response.data.data) 
-	    			setListUpdated(true);
+	    			setUpdateEffect(false);
 	    			renderList()
 
 	    		})
 	    		.catch((err) => { console.error('Aconteceu alguma coisa', err) })
 	    }
 	    getCategoriesList()
-	}, [listUpdated]);
+	}, [updateEffect]);
 
 	return (
     <Card sx={{marginTop: 5}}>

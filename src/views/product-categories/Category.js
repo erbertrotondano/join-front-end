@@ -6,15 +6,12 @@ import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import Button from '@mui/material/Button'
 import Divider from '@mui/material/Divider'
-import { useFetch } from '../../../src/hooks/useFetch'
 import { useRouter } from 'next/router'
 import { useState } from 'react';
 
 
-const Category = ({id, name, isLastItem}) => {
+const Category = ({id, name, isLastItem, onUpdateEffect}) => {
 	const router = useRouter();
-	const url = "http://localhost:80/api/v1/product-categories";
-	const { data: items, httpConfig, loading, error } = useFetch(url);
 	const [isDeleted, setIsDeleted] = useState(false);
 
 
@@ -23,7 +20,7 @@ const Category = ({id, name, isLastItem}) => {
 	    api
 	    	.delete(`/product-categories/${id}`)
 	    	.then((response) => {
-	    		console.log('DELETADO')
+	    		onUpdateEffect();
 	    	}).catch((error) => {
 	    		console.log('erro ', error)
 	    	})
