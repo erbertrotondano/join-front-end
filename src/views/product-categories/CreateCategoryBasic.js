@@ -1,6 +1,6 @@
 // ** React imports
+import api from "../../../src/services/api";
 import { useState, useEffect } from 'react';
-import { useFetch } from '../../../src/hooks/useFetch';
 import { useRouter } from 'next/router';
 
 // ** MUI Imports
@@ -18,10 +18,6 @@ const CreateCategoryBasic = ({id, name, method = 'POST'}) => {
 	const [categoryName, setCategoryName] = useState(name || '')
   const [requestMethod, setMethod] = useState(method);
 
-  	// Request stuff
-	const url = "http://localhost:80/api/v1/product-categories";
-	const { data: items, httpConfig, loading, error } = useFetch(url);
-
 	const router = useRouter();
 
 	const handleSubmit = async (e) => {
@@ -29,16 +25,23 @@ const CreateCategoryBasic = ({id, name, method = 'POST'}) => {
 	    const category = {
 	      nome_categoria: categoryName
 	    };
-	    if(requestMethod === 'PUT'){
-	      category.id = id;
-	    }
-
-	    try {
-	      await httpConfig(category, requestMethod);
-	      router.push('/product-categories');
-	    } catch (error) {
-	      console.error('Erro ao cadastrar o produto:', error);
-	    }
+      if(requestMethod === 'POST'){
+        api
+          .post('product-categories', category)
+          .then((response) => {
+            router.push('/product-categories')
+          }).catch((error) => {
+            console.log(error)
+          })
+      } else if(requestMethod === 'PUT'){
+        api
+          .put(`product-categories/${id}`, category)
+          .then((response) => {
+            router.push('/product-categories')
+          }).catch((error) => {
+            console.log(error)
+          })
+      }
 	}
 	return (
     <Card>
