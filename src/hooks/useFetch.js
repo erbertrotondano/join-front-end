@@ -31,6 +31,17 @@ export const useFetch = (url) => {
 			setMethod(method)
 			setItemId(data);
 		}
+		else if(method === 'PUT'){
+			setConfig({
+				method,
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify(data)
+			})
+			setMethod(method)
+			setItemId(data);
+		}
 	}
 
 	useEffect(() => {
@@ -60,13 +71,18 @@ export const useFetch = (url) => {
 				setCallFetch(json);
 			}	
 			else if (method === "DELETE") {
-				console.log(itemId);
 			    const deleteUrl = `${url}/${itemId.id}`;
-			    console.log(deleteUrl)
 		        const res = await fetch(deleteUrl, config);
 		        const json = await res.json();
 				setCallFetch(json);
 			}
+			else if (method === "PUT") {
+			    const editUrl = `${url}/${itemId.id}`;
+		        const res = await fetch(editUrl, config);
+		        const json = await res.json();
+				setCallFetch(json);
+			}
+
 		}
 		httpRequest();
 	}, [config, method, url])

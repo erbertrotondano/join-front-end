@@ -28,14 +28,15 @@ import MenuItem from '@mui/material/MenuItem'
 import EyeOutline from 'mdi-material-ui/EyeOutline'
 import EyeOffOutline from 'mdi-material-ui/EyeOffOutline'
 
-const CreateProductBasic = () => {
+const CreateProductBasic = ({ id, name, description, price, category, method = 'POST' }) => {
   // ** States
-  const [name, setName] = useState();
-  const [description, setDescription] = useState();
-  const [price, setPrice] = useState();
-  const [category, setCategory] = useState();
+  const [productName, setName] = useState(name || '');
+  const [productDescription, setDescription] = useState(description || '');
+  const [productPrice, setPrice] = useState(price || '');
+  const [selectedCategory, setSelectedCategory] = useState(category || '');
   const [isFormSubmitted, setFormSubmitted]= useState(false);
-  
+  const [requestMethod, setMethod] = useState(method);
+
   // Request stuff
   const url = "http://localhost:80/api/v1/products";
   const { data: items, httpConfig, loading, error } = useFetch(url);
@@ -44,23 +45,18 @@ const CreateProductBasic = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Before submit:', { name, description, price, category });
     setFormSubmitted(true);
-
     const product = {
-      nome_produto: name,
-      valor_produto: price.replace(/\D/g, ''),
-      id_categoria_produto: category
+      nome_produto: productName,
+      valor_produto: productPrice.replace(/\D/g, ''),
+      id_categoria_produto: selectedCategory
     };
+    if(requestMethod === 'PUT'){
+      product.id = id;
+    }
 
     try {
-      await httpConfig(product, 'POST');
-      setName('');
-      setDescription('');
-      setPrice('');
-      setCategory('');
-      
-      console.log('After submit:', { name, description, price, category });
+      await httpConfig(product, requestMethod);
       router.push('/products');
     } catch (error) {
       console.error('Erro ao cadastrar o produto:', error);
@@ -74,25 +70,28 @@ const CreateProductBasic = () => {
 
   const renderList = async () => {
     if (Array.isArray(categoriesItems.data)) {
-      console.log('aaaa', categoriesItems.data);
-      const categoryComponents = await Promise.all(
+      const productCategoryComponents = await Promise.all(
         categoriesItems.data.map(async (category) => (
           <MenuItem key={category.id} value={category.id}>{category.nome_categoria}</MenuItem>
         ))
       );
-      return categoryComponents;
+      return productCategoryComponents;
     }
     return null;
   };
 
   useEffect(() => {
-    console.log('useEffect triggered');
-    const renderAndSetCategories = async () => {
+  const renderAndSetCategories = async () => {
       if (categoriesItems) {
         const renderedCategories = await renderList();
         setCategories(renderedCategories);
+
+        // Define a categoria inicialmente selecionada
+        if (category) {
+          setSelectedCategory(category);
+        }
       }
-    };
+  }
 
     renderAndSetCategories();
   }, [categoriesItems, isFormSubmitted]);
@@ -110,6 +109,7 @@ const CreateProductBasic = () => {
               label='Produto' 
               placeholder='Ex: Guitarra Stratocaster' 
               onChange={(e) => setName(e.target.value)}
+              value={productName}
               />
             </Grid>
             <Grid item xs={12}>
@@ -119,7 +119,8 @@ const CreateProductBasic = () => {
               minRows={3}
               label='Descrição' 
               placeholder='Ex: A Fender Stratocaster, também conhecida no Brasil como Strato, é um modelo de guitarra elétrica criada por Leo Fender em 1954 e produzid...' 
-              onChange={(e) => setDescription(e.target.value)} 
+              onChange={(e) => setDescription(e.target.value)}
+              value={productDescription} 
               />
             </Grid>
             <Grid item xs={12}>
@@ -131,6 +132,7 @@ const CreateProductBasic = () => {
               step='0.01' 
               placeholder='Ex: 730.99' 
               onChange={(e) => setPrice(e.target.value)} 
+              value={productPrice}
               />
             </Grid>
             <Grid item xs={12}>
@@ -139,10 +141,10 @@ const CreateProductBasic = () => {
                 <Select
                   label='Categoria'
                   required
-                  defaultValue=''
                   id='form-layouts-separator-select'
                   labelId='form-layouts-separator-select-label'
-                  onChange={(e) => setCategory(e.target.value)} 
+                  onChange={(e) => setSelectedCategory(e.target.value)}
+                  value={selectedCategory} 
                 >
                   {categories}
                 </Select>

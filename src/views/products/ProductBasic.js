@@ -18,6 +18,7 @@ const ProductBasic = () => {
             name={product.nome_produto}
             description={product.description}
             price={product.valor_produto}
+            category={product.id_categoria_produto}
           />
         ))
       );

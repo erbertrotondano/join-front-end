@@ -7,15 +7,16 @@ import CardContent from '@mui/material/CardContent';
 import CardActions from '@mui/material/CardActions';
 import Button from '@mui/material/Button';
 import { useFetch } from '../../../src/hooks/useFetch';
+import { useRouter } from 'next/router';
 
-const Product = ({ id, name, description, price }) => {
+const Product = ({ id, name, description, price, category }) => {
+  const router = useRouter();
   const url = "http://localhost:80/api/v1/products";
   const { data: items, httpConfig, loading, error } = useFetch(url);
   const [isDeleted, setIsDeleted] = useState(false);
 
   const handleDeleteBtn = async () => {
     const product = { id };
-    console.log('aaaa', product);
 
     try {
       await httpConfig(product, 'DELETE');
@@ -24,6 +25,14 @@ const Product = ({ id, name, description, price }) => {
       console.error('Erro ao excluir o produto:', error);
     }
   };
+
+  const handleEditBtn = (e) => {
+    router.push({
+      pathname: '/products/edit',
+      query: { id, name, description, price, category },
+    });
+
+  }
 
   if (isDeleted) {
     return null; // Se o produto foi excluído, não renderize nada
@@ -42,7 +51,7 @@ const Product = ({ id, name, description, price }) => {
             </Typography>
           </CardContent>
           <CardActions className='card-action-dense'>
-            <Button>Editar</Button>
+            <Button onClick={handleEditBtn}>Editar</Button>
             <Button onClick={handleDeleteBtn}>Remover</Button>
           </CardActions>
         </Grid>
