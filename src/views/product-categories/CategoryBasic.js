@@ -1,6 +1,6 @@
 // ** React imports
 import { useState, useEffect } from 'react';
-import { useFetch } from '../../../src/hooks/useFetch';
+import api from "../../../src/services/api";
 
 // ** Components Imports
 import Category from './Category'
@@ -16,40 +16,49 @@ const CategoryBasic = () => {
 
 	const url = "http://localhost:80/api/v1/product-categories";
 	const [categories, setCategories] = useState([]);
-	const { data: items, httpConfig, loading, error } = useFetch(url);
+	const [listUpdated, setListUpdated] = useState(false);
 
-	const renderList = async () => {
-	    if (Array.isArray(items.data)) {
-	      const categoryComponents = await Promise.all(
-	        items.data.map(async (category, index) => (
-	          <Category 
-	          		key={category.id}
-	            	id={category.id}
-	            	name={category.nome_categoria}
-	            	isLastItem={index === items.data.length - 1}
-	            />
-	        ))
-	      );
-	      return categoryComponents;
-	    }
-	    return null;
-  	};
+	const renderList = () => {
+		console.log(categories)
+		console.log('chamando renderList')
+		if (Array.isArray(categories)) {
+
+			let categoriesToRender = categories.map((category, index) => 
+				(
+					<Category 
+	      		key={category.id}
+	        	id={category.id}
+	        	name={category.nome_categoria}
+	        	isLastItem={index === categories.length - 1}
+	        />
+			))
+			return categoriesToRender;
+		} else {
+			return 'ERRO'
+		}
+		
+	}
 
   	useEffect(() => {
-	    const renderAndSetCategories = async () => {
-	      if (items) {
-	        const renderedCategories = await renderList();
-	        setCategories(renderedCategories);
-	      }
-	    };
+  		console.log('Chamando useEffect');
+	 	    const getCategoriesList = () => {
+	    	api
+	    		.get('product-categories')
+	    		.then((response) => { 
+	    			setCategories(response.data.data) 
+	    			setListUpdated(true);
+	    			renderList()
 
-	    renderAndSetCategories();
-	}, [items]);
+	    		})
+	    		.catch((err) => { console.error('Aconteceu alguma coisa', err) })
+	    }
+	    getCategoriesList()
+	}, [listUpdated]);
 
 	return (
     <Card sx={{marginTop: 5}}>
       <CardContent sx={{ pt: theme => `${theme.spacing(2)} !important` }}>
-        {categories}
+        {renderList()}
       </CardContent>
     </Card>
   )

@@ -1,3 +1,6 @@
+// ** React imports
+import api from "../../../src/services/api";
+
 // ** MUI Imports
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
@@ -15,15 +18,15 @@ const Category = ({id, name, isLastItem}) => {
 	const [isDeleted, setIsDeleted] = useState(false);
 
 
-	const handleDeleteBtn = async () => {
+	const handleDeleteBtn = () => {
 	    const category = { id };
-
-	    try {
-	      await httpConfig(category, 'DELETE');
-	      setIsDeleted(true);
-	    } catch (error) {
-	      console.error('Erro ao excluir a categoria:', error);
-	    }
+	    api
+	    	.delete(`/product-categories/${id}`)
+	    	.then((response) => {
+	    		console.log('DELETADO')
+	    	}).catch((error) => {
+	    		console.log('erro ', error)
+	    	})
 	};
 
 	if (isDeleted) {
