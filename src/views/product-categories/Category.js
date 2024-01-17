@@ -1,14 +1,9 @@
 import Box from '@mui/material/Box'
-import Card from '@mui/material/Card'
-import Avatar from '@mui/material/Avatar'
 import Typography from '@mui/material/Typography'
-import IconButton from '@mui/material/IconButton'
-import CardHeader from '@mui/material/CardHeader'
-import CardContent from '@mui/material/CardContent'
 import Button from '@mui/material/Button'
 import { useFetch } from '../../../src/hooks/useFetch'
 import { useRouter } from 'next/router'
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Divider from '@mui/material/Divider'
 
 const Category = ({id, name, isLastItem}) => {
