@@ -1,5 +1,5 @@
 // ** React Imports
-import { useFetch } from '../../../src/hooks/useFetch';
+import api from "../../../src/services/api";
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 
@@ -26,10 +26,6 @@ const CreateProductBasic = ({ id, name, description, price, category, method = '
   const [isFormSubmitted, setFormSubmitted]= useState(false);
   const [requestMethod, setMethod] = useState(method);
 
-  // Request stuff
-  const url = "http://localhost:80/api/v1/products";
-  const { data: items, httpConfig, loading, error } = useFetch(url);
-
   const router = useRouter();
 
   const handleSubmit = async (e) => {
@@ -41,50 +37,55 @@ const CreateProductBasic = ({ id, name, description, price, category, method = '
       id_categoria_produto: selectedCategory,
       descricao_produto: productDescription
     };
-    if(requestMethod === 'PUT'){
-      product.id = id;
-    }
-
-    try {
-      await httpConfig(product, requestMethod);
-      router.push('/products');
-    } catch (error) {
-      console.error('Erro ao cadastrar o produto:', error);
-    }
+    if(requestMethod === 'POST'){
+        api
+          .post('products', product)
+          .then((response) => {
+            router.push('/products')
+          }).catch((error) => {
+            console.log(error)
+          })
+      } else if(requestMethod === 'PUT'){
+        api
+          .put(`products/${id}`, product)
+          .then((response) => {
+            router.push('/products')
+          }).catch((error) => {
+            console.log(error)
+          })
+      }
 };
 
 
   const [categories, setCategories] = useState([]);
-  const url_categories = "http://localhost:80/api/v1/product-categories";
-  const { data: categoriesItems, httpConfigCategories, loadingCategories, errorCategories } = useFetch(url_categories);
 
-  const renderList = async () => {
-    if (Array.isArray(categoriesItems.data)) {
-      const productCategoryComponents = await Promise.all(
-        categoriesItems.data.map(async (category) => (
+  const renderList = () => {
+    if (Array.isArray(categories)) {
+
+      let categoriesToRender = categories.map((category, index) => 
+        (
           <MenuItem key={category.id} value={category.id}>{category.nome_categoria}</MenuItem>
-        ))
-      );
-      return productCategoryComponents;
+      ))
+      return categoriesToRender;
+    } else {
+      return 'ERRO'
     }
-    return null;
-  };
-
-  useEffect(() => {
-  const renderAndSetCategories = async () => {
-      if (categoriesItems) {
-        const renderedCategories = await renderList();
-        setCategories(renderedCategories);
-
-        // Define a categoria inicialmente selecionada
-        if (category) {
-          setSelectedCategory(category);
-        }
-      }
+    
   }
 
-    renderAndSetCategories();
-  }, [categoriesItems, isFormSubmitted]);
+  useEffect(() => {
+      console.log('Chamando useEffect');
+        const getCategoriesList = () => {
+        api
+          .get('product-categories')
+          .then((response) => { 
+            setCategories(response.data.data) 
+            renderList()
+          })
+          .catch((err) => { console.error('Aconteceu alguma coisa', err) })
+      }
+      getCategoriesList()
+  }, [isFormSubmitted]);
 
   return (
     <Card>
@@ -136,7 +137,7 @@ const CreateProductBasic = ({ id, name, description, price, category, method = '
                   onChange={(e) => setSelectedCategory(e.target.value)}
                   value={selectedCategory} 
                 >
-                  {categories}
+                  {renderList()}
                 </Select>
               </FormControl>
             </Grid>

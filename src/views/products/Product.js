@@ -1,6 +1,6 @@
 // ** React imports
-import React, { useState, useEffect } from 'react';
-import { useFetch } from '../../../src/hooks/useFetch';
+import { useState, useEffect } from 'react';
+import api from "../../../src/services/api";
 import { useRouter } from 'next/router';
 
 // ** MUI Imports
@@ -12,21 +12,21 @@ import CardActions from '@mui/material/CardActions';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 
-const Product = ({ id, name, description, price, category }) => {
+const Product = ({ id, name, description, price, category, onUpdateEffect }) => {
   const router = useRouter();
-  const url = "http://localhost:80/api/v1/products";
-  const { data: items, httpConfig, loading, error } = useFetch(url);
   const [isDeleted, setIsDeleted] = useState(false);
 
   const handleDeleteBtn = async () => {
     const product = { id };
 
-    try {
-      await httpConfig(product, 'DELETE');
-      setIsDeleted(true);
-    } catch (error) {
-      console.error('Erro ao excluir o produto:', error);
-    }
+    api.delete(`products/${id}`)
+      .then((response) => {
+        onUpdateEffect()
+      }).catch((err) => {
+        console.log('ERRO Algo aconteceu ', err)
+      });
+      
+      
   };
 
   const handleEditBtn = (e) => {
