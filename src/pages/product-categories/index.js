@@ -10,7 +10,7 @@ const ProductCategories = () => {
 				<Typography variant='h5'>Categorias de Produtos</Typography>
 				<Button 
 					variant='contained'
-		            href='/products/create'>
+		            href='/product-categories/create'>
 						Adicionar nova
 				</Button>	
 			</div>
