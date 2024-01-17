@@ -14,16 +14,15 @@ import Snackbar from '@mui/material/Snackbar'
 
 
 const Category = ({id, name, isLastItem, onUpdateEffect}) => {
+	
 	const router = useRouter();
 	const [isDeleted, setIsDeleted] = useState(false);
 	const [errorMsg, setErrorMsg] = useState();
 	const [error, setError] = useState();
 
-
 	const handleDeleteBtn = () => {
 	    const category = { id };
-	    api
-	    	.delete(`/product-categories/${id}`)
+	    api.delete(`/product-categories/${id}`)
 	    	.then((response) => {
 	    		onUpdateEffect();
 	    	}).catch((err) => {
@@ -35,7 +34,7 @@ const Category = ({id, name, isLastItem, onUpdateEffect}) => {
 	};
 
 	if (isDeleted) {
-		return null; // Se a categoria for excluída, não renderize nada
+		return null;
 	}  
 
 	const handleEditBtn = (e) => {

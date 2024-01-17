@@ -10,11 +10,12 @@ import Grid from '@mui/material/Grid';
 const ProductBasic = () => {
   
   const [products, setProducts] = useState([]);
-    const [updateEffect, setUpdateEffect] = useState(false);
+  // Usado pelo componente filho pra triggar um update aqui
+  const [updateEffect, setUpdateEffect] = useState(false);
 
   const renderList = () => {
+    
     if (Array.isArray(products)) {
-
       let productsToRender = products.map((product) => 
         (
           <Product

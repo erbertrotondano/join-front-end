@@ -16,9 +16,10 @@ import Typography from '@mui/material/Typography'
 import FormControl from '@mui/material/FormControl'
 import Select from '@mui/material/Select'
 import MenuItem from '@mui/material/MenuItem'
+import { NumericFormat } from 'react-number-format';
 
 const CreateProductBasic = ({ id, name, description, price, category, method = 'POST' }) => {
-  // ** States
+  // States
   const [productName, setName] = useState(name || '');
   const [productDescription, setDescription] = useState(description || '');
   const [productPrice, setPrice] = useState(price || '');
@@ -30,13 +31,16 @@ const CreateProductBasic = ({ id, name, description, price, category, method = '
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    // Usado pra triggar o useEffect
     setFormSubmitted(true);
     const product = {
       nome_produto: productName,
-      valor_produto: productPrice.replace(/\D/g, ''),
+      valor_produto: productPrice,
       id_categoria_produto: selectedCategory,
       descricao_produto: productDescription
     };
+    // HTTP stuff
     if(requestMethod === 'POST'){
         api
           .post('products', product)
@@ -54,7 +58,20 @@ const CreateProductBasic = ({ id, name, description, price, category, method = '
             console.log(error)
           })
       }
-};
+  };
+
+  const handlePriceChange = (e) => {
+    
+    // Tratando o preço pra ficar com 2 casas decimais
+    let inputValue = e.value;
+    inputValue = inputValue.replace(',', '.');
+    const cleanedValue = inputValue.replace(/[^\d.]/g, '');
+    const [integerPart, decimalPart] = cleanedValue.split('.');
+    const limitedDecimalPart = decimalPart ? decimalPart.slice(0, 2) : '';
+    const newValue = `${integerPart}${limitedDecimalPart ? `.${limitedDecimalPart}` : ''}`;
+
+    setPrice(newValue);
+  };
 
 
   const [categories, setCategories] = useState([]);
@@ -67,14 +84,10 @@ const CreateProductBasic = ({ id, name, description, price, category, method = '
           <MenuItem key={category.id} value={category.id}>{category.nome_categoria}</MenuItem>
       ))
       return categoriesToRender;
-    } else {
-      return 'ERRO'
-    }
-    
+    }     
   }
 
   useEffect(() => {
-      console.log('Chamando useEffect');
         const getCategoriesList = () => {
         api
           .get('product-categories')
@@ -115,15 +128,19 @@ const CreateProductBasic = ({ id, name, description, price, category, method = '
               />
             </Grid>
             <Grid item xs={12}>
-              <TextField 
-              fullWidth 
-              label='Preço' 
-              required
-              type='number' 
-              step='0.01' 
-              placeholder='Ex: 730.99' 
-              onChange={(e) => setPrice(e.target.value)} 
-              value={productPrice}
+              <NumericFormat 
+                  customInput={TextField}
+                  thousandSeparator="."
+                  decimalSeparator=","
+                  prefix="R$ "
+                  fullWidth
+                  label='Preço'
+                  required
+                  placeholder='Ex: 730,99'
+                  allowNegative={false}
+                  allowLeadingZeros={false}
+                  onValueChange={handlePriceChange}
+                  value={productPrice}
               />
             </Grid>
             <Grid item xs={12}>
@@ -149,8 +166,7 @@ const CreateProductBasic = ({ id, name, description, price, category, method = '
                   flexWrap: 'wrap',
                   alignItems: 'center',
                   justifyContent: 'space-between'
-                }}
-              >
+                }}>
                 <Button type='submit' variant='contained' size='large'>
                   Cadastrar!
                 </Button>

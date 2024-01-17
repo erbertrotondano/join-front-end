@@ -16,13 +16,12 @@ const CategoryBasic = () => {
 
 	const url = "http://localhost:80/api/v1/product-categories";
 	const [categories, setCategories] = useState([]);
+	// Usado pelo componente filho pra triggar um update aqui
 	const [updateEffect, setUpdateEffect] = useState(false);
 
 	const renderList = () => {
-		console.log(categories)
-		console.log('chamando renderList')
+		
 		if (Array.isArray(categories)) {
-
 			let categoriesToRender = categories.map((category, index) => 
 				(
 					<Category 
@@ -35,14 +34,10 @@ const CategoryBasic = () => {
 	        />
 			))
 			return categoriesToRender;
-		} else {
-			return 'ERRO'
 		}
-		
 	}
 
   	useEffect(() => {
-  		console.log('Chamando useEffect');
 	 	    const getCategoriesList = () => {
 	    	api
 	    		.get('product-categories')

@@ -13,6 +13,7 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 
 const Product = ({ id, name, description, price, category, onUpdateEffect }) => {
+  
   const router = useRouter();
   const [isDeleted, setIsDeleted] = useState(false);
 
@@ -25,9 +26,7 @@ const Product = ({ id, name, description, price, category, onUpdateEffect }) => 
       }).catch((err) => {
         console.log('ERRO Algo aconteceu ', err)
       });
-      
-      
-  };
+    };
 
   const handleEditBtn = (e) => {
     router.push({
