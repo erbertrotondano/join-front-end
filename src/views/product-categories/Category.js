@@ -10,10 +10,10 @@ import Button from '@mui/material/Button'
 import Divider from '@mui/material/Divider'
 import Alert from '@mui/material/Alert'
 import Snackbar from '@mui/material/Snackbar'
+import Badge from '@mui/material/Badge'
+import CubeOutline from 'mdi-material-ui/CubeOutline'
 
-
-
-const Category = ({id, name, isLastItem, onUpdateEffect}) => {
+const Category = ({id, name, isLastItem, onUpdateEffect, productsCount}) => {
 	
 	const router = useRouter();
 	const [isDeleted, setIsDeleted] = useState(false);
@@ -68,6 +68,9 @@ const Category = ({id, name, isLastItem, onUpdateEffect}) => {
 		        <Box sx={{ marginRight: 2, display: 'flex', flexDirection: 'column' }}>
 		          <Box sx={{ display: 'flex' }}>
 		            <Typography sx={{ mr: 0.5, fontWeight: 600, letterSpacing: '0.25px' }}>{name}</Typography>
+		            <Badge badgeContent={productsCount} color="primary">
+					  <CubeOutline color="action" />
+					</Badge>
 		          </Box>
 		        </Box>
 

@@ -29,7 +29,7 @@ const CategoryBasic = () => {
 	        	id={category.id}
 	        	onUpdateEffect={() => setUpdateEffect(true)}
 	        	name={category.nome_categoria}
-
+	        	productsCount={category.products_count}
 	        	isLastItem={index === categories.length - 1}
 	        />
 			))
