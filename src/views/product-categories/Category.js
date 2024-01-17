@@ -1,18 +1,23 @@
 // ** React imports
 import api from "../../../src/services/api";
+import { useRouter } from 'next/router'
+import { useState } from 'react';
 
 // ** MUI Imports
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import Button from '@mui/material/Button'
 import Divider from '@mui/material/Divider'
-import { useRouter } from 'next/router'
-import { useState } from 'react';
+import Alert from '@mui/material/Alert'
+import Snackbar from '@mui/material/Snackbar'
+
 
 
 const Category = ({id, name, isLastItem, onUpdateEffect}) => {
 	const router = useRouter();
 	const [isDeleted, setIsDeleted] = useState(false);
+	const [errorMsg, setErrorMsg] = useState();
+	const [error, setError] = useState();
 
 
 	const handleDeleteBtn = () => {
@@ -21,8 +26,11 @@ const Category = ({id, name, isLastItem, onUpdateEffect}) => {
 	    	.delete(`/product-categories/${id}`)
 	    	.then((response) => {
 	    		onUpdateEffect();
-	    	}).catch((error) => {
-	    		console.log('erro ', error)
+	    	}).catch((err) => {
+	    		if(err.response.status === 409){
+	    			setError(true)
+	    			setErrorMsg('Opa! Não podemos excluir essa categoria porque há produtos cadastrados nela')
+	    		}
 	    	})
 	};
 
@@ -35,6 +43,9 @@ const Category = ({id, name, isLastItem, onUpdateEffect}) => {
 	      pathname: '/product-categories/edit',
 	      query: { id, name },
 	    });
+	}
+	const handleClose = () => {
+		setError(false);
 	}
 	return (
 		<Box>
@@ -66,6 +77,17 @@ const Category = ({id, name, isLastItem, onUpdateEffect}) => {
 		            <Button onClick={handleDeleteBtn}>Excluir</Button>
 		        </Box>
 		      </Box>
+
+		      <Snackbar open={error} autoHideDuration={6000} onClose={handleClose}>
+				  <Alert
+				    onClose={handleClose}
+				    severity="error"
+				    variant="filled"
+				    sx={{ width: '100%' }}
+				  >
+				    {errorMsg}
+				  </Alert>
+				</Snackbar>
 		    </Box>
 		    {!isLastItem && <Divider />}
 	    </Box>
