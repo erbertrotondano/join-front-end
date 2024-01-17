@@ -24,7 +24,7 @@ import MenuItem from '@mui/material/MenuItem'
 const CreateCategoryBasic = ({id, name, method = 'POST'}) => {
 	
 	const [categoryName, setCategoryName] = useState(name || '')
-  	const [requestMethod, setMethod] = useState(method);
+  const [requestMethod, setMethod] = useState(method);
 
   	// Request stuff
 	const url = "http://localhost:80/api/v1/product-categories";

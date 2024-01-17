@@ -1,5 +1,5 @@
 import React from 'react'
-import ProductBasic from 'src/views/products/ProductBasic'
+import CategoryBasic from 'src/views/product-categories/CategoryBasic'
 import Typography from '@mui/material/Typography'
 import Button from '@mui/material/Button'
 
@@ -14,6 +14,7 @@ const ProductCategories = () => {
 						Adicionar nova
 				</Button>	
 			</div>
+			<CategoryBasic />
 		</div>
 	)
 }
