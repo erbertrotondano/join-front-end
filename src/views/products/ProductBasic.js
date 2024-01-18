@@ -22,7 +22,7 @@ const ProductBasic = ({category = null, isProductRecentlyInserted = false, isPro
   const [showSuccessMessage, setShowSuccessMessage] = useState(isProductRecentlyInserted || isProductRecentlyUpdated);
   const renderList = () => {
     
-    if (Array.isArray(products.data) && !products.data.length === 0) {
+    if (Array.isArray(products.data) && products.data.length !== 0) {
       let productsToRender = products.data.map((product) => 
         (
           <Product
