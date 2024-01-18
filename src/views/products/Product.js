@@ -16,6 +16,16 @@ const Product = ({ id, name, description, price, category, onUpdateEffect }) => 
   
   const router = useRouter();
   const [isDeleted, setIsDeleted] = useState(false);
+  const [showMore, setShowMore] = useState(false);
+  const [showingMore, setShowingMore] = useState(false);
+  const [toggleShowText, setToggleShowText] = useState('Ler mais');
+  const [renderedDescription, setRenderedDescription] = useState(() => {
+    if (description.length > 450) {
+      setShowMore(true);
+      return `${description.slice(0, 450)}[...]`;
+    }
+    return description;
+  });
 
   const handleDeleteBtn = async () => {
     const product = { id };
@@ -40,6 +50,20 @@ const Product = ({ id, name, description, price, category, onUpdateEffect }) => 
     return null; // Se o produto foi excluído, não renderize nada
   }
 
+  const handleToggleShowingMore = () => {
+    setToggleShowText(showingMore ? 'Ler Mais' : 'Colapsar');
+    setShowingMore(!showingMore);
+    toggleDescriptionSize(!showingMore);
+  };
+  
+  const toggleDescriptionSize = (prevShowingMore) => {
+    if (prevShowingMore) {
+      setRenderedDescription(description);
+    } else {
+      setRenderedDescription(`${description.slice(0, 450)}[...]`);
+    }
+  };
+
   return (
     <Card style={{ marginTop: 15 }}>
       <Grid container spacing={6}>
@@ -49,12 +73,13 @@ const Product = ({ id, name, description, price, category, onUpdateEffect }) => 
               {name}
             </Typography>
             <Typography variant='body2'>
-              {description}
+              {renderedDescription}
             </Typography>
           </CardContent>
           <CardActions className='card-action-dense'>
             <Button onClick={handleEditBtn}>Editar</Button>
             <Button onClick={handleDeleteBtn}>Remover</Button>
+            {showMore && <Button onClick={handleToggleShowingMore}>{toggleShowText}</Button>}
           </CardActions>
         </Grid>
         <Grid

@@ -8,7 +8,7 @@ import Grid from '@mui/material/Grid';
 // ** Icons Imports
 
 const ProductBasic = ({category = null}) => {
-  console.log('PRODUCTBASIC 1 ', category)
+
   const [products, setProducts] = useState([]);
   // Usado pelo componente filho pra triggar um update aqui
   const [updateEffect, setUpdateEffect] = useState(false);
@@ -37,7 +37,6 @@ const ProductBasic = ({category = null}) => {
 
   useEffect(() => {
         const getProductsList = () => {
-          console.log('PRODUCTBASIC ', category)
           const url = category ? `product-category/${category.id}/products` : 'products'
         api
           .get(url)
