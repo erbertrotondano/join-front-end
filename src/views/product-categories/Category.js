@@ -19,6 +19,8 @@ const Category = ({id, name, isLastItem, onUpdateEffect, productsCount}) => {
 	const [isDeleted, setIsDeleted] = useState(false);
 	const [errorMsg, setErrorMsg] = useState();
 	const [error, setError] = useState();
+	const [isMouseOver, setMouseOver] = useState(false);
+	const [isCategoryEmpty, setCategoryEmpty] = useState(false);
 
 	const handleDeleteBtn = () => {
 	    const category = { id };
@@ -43,8 +45,18 @@ const Category = ({id, name, isLastItem, onUpdateEffect, productsCount}) => {
 	      query: { id, name },
 	    });
 	}
-	const handleClose = () => {
+	const handleDeleteSnackClose = () => {
 		setError(false);
+	}
+	const handleCategorySnackClose = () => {
+		setCategoryEmpty(false);
+	}
+	const handleBadgeClick = () => {
+		if(productsCount > 0){
+			router.push(`products-by-category/?category_id=${id}`)	
+		} else {
+			setCategoryEmpty(true)
+		}
 	}
 	return (
 		<Box>
@@ -68,7 +80,14 @@ const Category = ({id, name, isLastItem, onUpdateEffect, productsCount}) => {
 		        <Box sx={{ marginRight: 2, display: 'flex', flexDirection: 'column' }}>
 		          <Box sx={{ display: 'flex' }}>
 		            <Typography sx={{ mr: 0.5, fontWeight: 600, letterSpacing: '0.25px' }}>{name}</Typography>
-		            <Badge badgeContent={productsCount} color="primary">
+		            <Badge 
+			            badgeContent={productsCount} 
+			            style={{cursor: 'pointer'}}
+			            color={ isMouseOver ? "secondary" : 'primary'}
+			            onMouseOver={() => setMouseOver(true)}
+			            onMouseOut={() => setMouseOver(false)}
+			            onClick={handleBadgeClick}
+			            >
 					  <CubeOutline color="action" />
 					</Badge>
 		          </Box>
@@ -80,14 +99,24 @@ const Category = ({id, name, isLastItem, onUpdateEffect, productsCount}) => {
 		        </Box>
 		      </Box>
 
-		      <Snackbar open={error} autoHideDuration={6000} onClose={handleClose}>
+		      <Snackbar open={error} autoHideDuration={6000} onClose={handleDeleteSnackClose}>
 				  <Alert
-				    onClose={handleClose}
+				    onClose={handleDeleteSnackClose}
 				    severity="error"
 				    variant="filled"
 				    sx={{ width: '100%' }}
 				  >
 				    {errorMsg}
+				  </Alert>
+				</Snackbar>
+				<Snackbar open={isCategoryEmpty} autoHideDuration={6000} onClose={handleCategorySnackClose}>
+				  <Alert
+				    onClose={handleCategorySnackClose}
+				    severity="warning"
+				    variant="filled"
+				    sx={{ width: '100%' }}
+				  >
+				    Essa categoria está vazia
 				  </Alert>
 				</Snackbar>
 		    </Box>
