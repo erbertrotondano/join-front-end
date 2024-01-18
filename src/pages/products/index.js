@@ -5,7 +5,12 @@ import ProductBasic from 'src/views/products/ProductBasic'
 import Typography from '@mui/material/Typography'
 import Button from '@mui/material/Button'
 
+// ** React imports
+import { useRouter } from 'next/router';
+
 const Products = () => {
+	const router = useRouter();
+	const { isProductRecentlyInserted, isProductRecentlyUpdated } = router.query;
 	return (
 		<div>
 			<div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -16,7 +21,9 @@ const Products = () => {
 						Adicionar novo
 				</Button>	
 			</div>
-			<ProductBasic />
+			<ProductBasic 
+			isProductRecentlyInserted={isProductRecentlyInserted}
+			isProductRecentlyUpdated={isProductRecentlyUpdated}/>
 		</div>
 	)
 }

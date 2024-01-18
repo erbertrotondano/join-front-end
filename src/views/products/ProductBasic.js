@@ -8,14 +8,16 @@ import Product from './Product';
 // ** MUI Imports
 import Grid from '@mui/material/Grid';
 import Pagination from '@mui/material/Pagination';
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
 // ** Icons Imports
 
-const ProductBasic = ({category = null}) => {
+const ProductBasic = ({category = null, isProductRecentlyInserted = false, isProductRecentlyUpdated = false}) => {
   const router = useRouter();
   const [products, setProducts] = useState([]);
   // Usado pelo componente filho pra triggar um update aqui
   const [updateEffect, setUpdateEffect] = useState(false);
-
+  const [showSuccessMessage, setShowSuccessMessage] = useState(isProductRecentlyInserted || isProductRecentlyUpdated);
   const renderList = () => {
     
     if (Array.isArray(products.data)) {
@@ -46,6 +48,18 @@ const ProductBasic = ({category = null}) => {
         console.error('Erro: ', err)
       })
   }
+  
+  const handleSnackClose = () => {
+    setShowSuccessMessage(false);
+  }
+
+  const getSuccessMessage = () => {
+    if(isProductRecentlyInserted){
+      return ('Produto cadastrado com sucesso')
+    } else if (isProductRecentlyUpdated){
+      return ('Produto atualizado com sucesso')
+    }
+  }
 
   useEffect(() => {
         const getProductsList = () => {
@@ -70,6 +84,16 @@ const ProductBasic = ({category = null}) => {
       <Grid container spacing={3} mt={4} justifyContent="center">
         {products.last_page > 1 && <Pagination count={products.last_page} onChange={handlePageChange} variant="outlined" color="primary" />}
       </Grid>
+      <Snackbar open={showSuccessMessage} autoHideDuration={6000} onClose={handleSnackClose}>
+          <Alert
+            onClose={handleSnackClose}
+            severity="success"
+            variant="filled"
+            sx={{ width: '100%' }}
+          >
+            {getSuccessMessage()}
+          </Alert>
+      </Snackbar>
     </Grid>
   );
 };

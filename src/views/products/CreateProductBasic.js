@@ -45,7 +45,10 @@ const CreateProductBasic = ({ id, name, description, price, category, method = '
         api
           .post('products', product)
           .then((response) => {
-            router.push('/products')
+            router.push({
+              pathname: '/products',
+              query: { isProductRecentlyInserted: true },
+            });
           }).catch((error) => {
             console.log(error)
           })
@@ -53,7 +56,10 @@ const CreateProductBasic = ({ id, name, description, price, category, method = '
         api
           .put(`products/${id}`, product)
           .then((response) => {
-            router.push('/products')
+            router.push({
+              pathname: '/products',
+              query: { isProductRecentlyUpdated: true },
+            });
           }).catch((error) => {
             console.log(error)
           })
