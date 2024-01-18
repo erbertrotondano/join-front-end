@@ -25,7 +25,7 @@ const CategoryBasic = ({isCategoryRecentlyInserted = false, isCategoryRecentlyUp
 
 	const renderList = () => {
 		
-		if (Array.isArray(categories.data)) {
+		if (Array.isArray(categories.data) && categories.data.length !== 0) {
 			let categoriesToRender = categories.data.map((category, index) => 
 				(
 					<Category 
@@ -38,6 +38,16 @@ const CategoryBasic = ({isCategoryRecentlyInserted = false, isCategoryRecentlyUp
 	        />
 			))
 			return categoriesToRender;
+		} else {
+			return (
+					<Grid container spacing={3} mt={4} flexDirection={'column'}>
+				    <Card sx={{marginTop: 5}}>
+				      <CardContent sx={{ pt: theme => `${theme.spacing(2)} !important` }}>
+				        Sinto muito, não há nenhuma categoria cadastrada.
+				      </CardContent>
+				    </Card>
+	    		</Grid>
+				)
 		}
 	}
 	const handlePageChange = (e, page) => {

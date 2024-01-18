@@ -10,6 +10,8 @@ import Grid from '@mui/material/Grid';
 import Pagination from '@mui/material/Pagination';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
 // ** Icons Imports
 
 const ProductBasic = ({category = null, isProductRecentlyInserted = false, isProductRecentlyUpdated = false}) => {
@@ -20,7 +22,7 @@ const ProductBasic = ({category = null, isProductRecentlyInserted = false, isPro
   const [showSuccessMessage, setShowSuccessMessage] = useState(isProductRecentlyInserted || isProductRecentlyUpdated);
   const renderList = () => {
     
-    if (Array.isArray(products.data)) {
+    if (Array.isArray(products.data) && !products.data.length === 0) {
       let productsToRender = products.data.map((product) => 
         (
           <Product
@@ -34,7 +36,17 @@ const ProductBasic = ({category = null, isProductRecentlyInserted = false, isPro
           />
       ))
       return productsToRender;
-    }     
+    } else {
+      return (
+        <Grid container spacing={3} mt={4} flexDirection={'column'}>
+            <Card sx={{paddingTop: 5}}>
+              <CardContent sx={{ pt: theme => `${theme.spacing(2)} !important` }}>
+                Sinto muito, não há nenhum produto cadastrado.
+              </CardContent>
+            </Card>
+          </Grid>
+      )
+    }  
   }
 
   const handlePageChange = (e, page) => {
