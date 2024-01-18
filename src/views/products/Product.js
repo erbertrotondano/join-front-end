@@ -47,7 +47,7 @@ const Product = ({ id, name, description, price, category, onUpdateEffect }) => 
   }
 
   if (isDeleted) {
-    return null; // Se o produto foi excluído, não renderize nada
+    return null;
   }
 
   const handleToggleShowingMore = () => {
