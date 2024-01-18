@@ -5,7 +5,14 @@ import CategoryBasic from 'src/views/product-categories/CategoryBasic'
 import Typography from '@mui/material/Typography'
 import Button from '@mui/material/Button'
 
+// ** React imports
+import { useRouter } from 'next/router';
+
 const ProductCategories = () => {
+	
+	const router = useRouter();
+	const { isCategoryRecentlyInserted, isCategoryRecentlyUpdated } = router.query;
+
 	return (
 		<div>
 			<div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -16,7 +23,10 @@ const ProductCategories = () => {
 						Adicionar nova
 				</Button>	
 			</div>
-			<CategoryBasic />
+			<CategoryBasic 
+			isCategoryRecentlyInserted={isCategoryRecentlyInserted}
+			isCategoryRecentlyUpdated={isCategoryRecentlyUpdated}
+			/>
 		</div>
 	)
 }

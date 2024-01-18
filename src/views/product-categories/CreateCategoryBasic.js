@@ -29,7 +29,10 @@ const CreateCategoryBasic = ({id, name, method = 'POST'}) => {
         api
           .post('product-categories', category)
           .then((response) => {
-            router.push('/product-categories')
+            router.push({
+              pathname: '/product-categories',
+              query: { isCategoryRecentlyInserted: true },
+            });
           }).catch((error) => {
             console.log(error)
           })
@@ -37,7 +40,10 @@ const CreateCategoryBasic = ({id, name, method = 'POST'}) => {
         api
           .put(`product-categories/${id}`, category)
           .then((response) => {
-            router.push('/product-categories')
+            router.push({
+              pathname: '/product-categories',
+              query: { isCategoryRecentlyUpdated: true },
+            });
           }).catch((error) => {
             console.log(error)
           })

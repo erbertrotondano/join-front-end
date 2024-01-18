@@ -10,16 +10,18 @@ import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
 import Pagination from '@mui/material/Pagination';
 import Grid from '@mui/material/Grid';
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
 
 // ** Icons Imports
 import ChevronUp from 'mdi-material-ui/ChevronUp'
 
-const CategoryBasic = () => {
+const CategoryBasic = ({isCategoryRecentlyInserted = false, isCategoryRecentlyUpdated = false}) => {
 
-	const url = "http://localhost:80/api/v1/product-categories";
 	const [categories, setCategories] = useState([]);
 	// Usado pelo componente filho pra triggar um update aqui
 	const [updateEffect, setUpdateEffect] = useState(false);
+	const [showSuccessMessage, setShowSuccessMessage] = useState(isCategoryRecentlyInserted || isCategoryRecentlyUpdated);
 
 	const renderList = () => {
 		
@@ -49,6 +51,18 @@ const CategoryBasic = () => {
         console.error('Erro: ', err) 
       })
   }
+  const handleSnackClose = () => {
+    setShowSuccessMessage(false);
+  }
+
+  const getSuccessMessage = () => {
+    if(isCategoryRecentlyInserted){
+      return ('Categoria cadastrada com sucesso')
+    } else if (isCategoryRecentlyUpdated){
+      return ('Categoria atualizada com sucesso')
+    }
+  }
+
   	useEffect(() => {
 	 	    const getCategoriesList = () => {
 	    	api
@@ -74,6 +88,16 @@ const CategoryBasic = () => {
 	    <Grid container spacing={3} mt={4} justifyContent="center">
         {categories.last_page > 1 && <Pagination count={categories.last_page} onChange={handlePageChange} variant="outlined" color="primary" />}
       </Grid>
+      <Snackbar open={showSuccessMessage} autoHideDuration={6000} onClose={handleSnackClose}>
+          <Alert
+            onClose={handleSnackClose}
+            severity="success"
+            variant="filled"
+            sx={{ width: '100%' }}
+          >
+            {getSuccessMessage()}
+          </Alert>
+      </Snackbar>
      </Grid>
 
   )
