@@ -8,6 +8,8 @@ import Category from './Category'
 // ** MUI Imports
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
+import Pagination from '@mui/material/Pagination';
+import Grid from '@mui/material/Grid';
 
 // ** Icons Imports
 import ChevronUp from 'mdi-material-ui/ChevronUp'
@@ -21,8 +23,8 @@ const CategoryBasic = () => {
 
 	const renderList = () => {
 		
-		if (Array.isArray(categories)) {
-			let categoriesToRender = categories.map((category, index) => 
+		if (Array.isArray(categories.data)) {
+			let categoriesToRender = categories.data.map((category, index) => 
 				(
 					<Category 
 	      		key={category.id}
@@ -30,34 +32,50 @@ const CategoryBasic = () => {
 	        	onUpdateEffect={() => setUpdateEffect(true)}
 	        	name={category.nome_categoria}
 	        	productsCount={category.products_count}
-	        	isLastItem={index === categories.length - 1}
+	        	isLastItem={index === categories.data.length - 1}
 	        />
 			))
 			return categoriesToRender;
 		}
 	}
-
+	const handlePageChange = (e, page) => {
+    api.get(`product-categories?page=${page}`)
+      .then((response) => {
+        setCategories(response.data) 
+        setUpdateEffect(false);
+        renderList()
+      })
+      .catch((err) => {
+        console.error('Erro: ', err) 
+      })
+  }
   	useEffect(() => {
 	 	    const getCategoriesList = () => {
 	    	api
 	    		.get('product-categories')
 	    		.then((response) => { 
-	    			setCategories(response.data.data) 
+	    			setCategories(response.data) 
 	    			setUpdateEffect(false);
 	    			renderList()
 
 	    		})
-	    		.catch((err) => { console.error('Aconteceu alguma coisa', err) })
+	    		.catch((err) => { console.error('Erro: ', err) })
 	    }
 	    getCategoriesList()
 	}, [updateEffect]);
 
 	return (
-    <Card sx={{marginTop: 5}}>
-      <CardContent sx={{ pt: theme => `${theme.spacing(2)} !important` }}>
-        {renderList()}
-      </CardContent>
-    </Card>
+		<Grid container spacing={3} mt={4} flexDirection={'column'}>
+	    <Card sx={{marginTop: 5}}>
+	      <CardContent sx={{ pt: theme => `${theme.spacing(2)} !important` }}>
+	        {renderList()}
+	      </CardContent>
+	    </Card>
+	    <Grid container spacing={3} mt={4} justifyContent="center">
+        {categories.last_page > 1 && <Pagination count={categories.last_page} onChange={handlePageChange} variant="outlined" color="primary" />}
+      </Grid>
+     </Grid>
+
   )
 }
 
