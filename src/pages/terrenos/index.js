@@ -7,24 +7,21 @@ import Button from '@mui/material/Button'
 // ** React imports
 import { useRouter } from 'next/router';
 
-const Owners = () => {
+const Terrains = () => {
 	const router = useRouter();
 	const { isOwnerRecentlyInserted, isOwnerRecentlyUpdated } = router.query;
 	return (
 		<div>
 			<div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-				<Typography variant='h5'>Proprietários</Typography>
+				<Typography variant='h5'>Terrenos</Typography>
 				<Button 
 					variant='contained'
-		            href='/proprietarios/novo'>
+		            href='/terrenos/novo'>
 						Adicionar novo
 				</Button>	
 			</div>
-			{/*<ProductBasic 
-			isOwnerRecentlyInserted={isOwnerRecentlyInserted}
-			isOwnerRecentlyUpdated={isOwnerRecentlyUpdated}/>*/}
 		</div>
 	)
 }
 
-export default Owners
+export default Terrains

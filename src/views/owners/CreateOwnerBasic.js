@@ -115,52 +115,54 @@ const CreateOwnerBasic = ({
     	// Usado pra triggar o useEffect
 	    setFormSubmitted(true);
 	    
+	     const owner = {
+	    	name: ownerName, 
+				cpf: ownerCpf, 
+				rg: ownerRg, 
+				nationality: selectedNationality, 
+				ssp: ownerSsp, 
+				mother_name: ownerMothersName, 
+				father_name: ownerFathersName, 
+				job: ownerJob,
+				phone: ownerPhone,
+				civil_state: selectedCivilState,
+				husband_name: husbandName,
+				husband_cpf: husbandCpf,
+				husband_rg: husbandRg,
+				husband_ssp: husbandSsp,
+				husband_mother_name: husbandMothersName,
+				husband_father_name: husbandFathersName,
+				husband_nationality:selectedHusbandNationality, 
+	    }
+    
 	    // HTTP stuff
 	    if(requestMethod === 'POST'){
 	        api
 	          .post('proprietarios', owner)
 	          .then((response) => {
-	          	/// Set SNACKBAR to say it successfully saved the data
-	            // router.push({
-	            //   pathname: '/proprietarios',
-	            //   query: { isOwnerRecentlyInserted: true },
-	            // });
+	          	console.log(123, owner)
+	            router.push({
+	              pathname: '/terrenos/novo',
+	              query: { ownerCpf: ownerCpf },
+	            });
 	          }).catch((error) => {
+	          	console.log(129, owner)
 	            console.log(error)
 	          })
 	      } else if(requestMethod === 'PUT'){
 	        api
 	          .put(`proprietarios/${ownerId}`, owner)
 	          .then((response) => {
-	            // router.push({
-	            //   pathname: '/products',
-	            //   // query: { isProductRecentlyUpdated: true },
-	            // });
+	            router.push({
+	              pathname: '/terrenos/novo',
+	              query: { ownerCpf: ownerCpf },
+	            });
 	          }).catch((error) => {
 	            console.log(error)
 	          })
 	      }
     } else {
     	setOpenSnackbar(true);
-    }
-    const owner = {
-    	name: ownerName, 
-			cpf: ownerCpf, 
-			rg: ownerRg, 
-			nationality: selectedNationality, 
-			ssp: ownerSsp, 
-			mother_name: ownerMothersName, 
-			father_name: ownerFathersName, 
-			job: ownerJob,
-			phone: ownerPhone,
-			civil_state: selectedCivilState,
-			husband_name: husbandName,
-			husband_cpf: husbandCpf,
-			husband_rg: husbandRg,
-			husband_ssp: husbandSsp,
-			husband_mother_name: husbandMothersName,
-			husband_father_name: husbandFathersName,
-			husband_nationality:selectedHusbandNationality, 
     }
     
   };
