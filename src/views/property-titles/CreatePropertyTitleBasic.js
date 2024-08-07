@@ -20,14 +20,13 @@ import MenuItem from '@mui/material/MenuItem'
 import { NumericFormat } from 'react-number-format';
 import cpfMask from '../../../src/helpers/CpfMask';
 import isCpfValid from '../../../src/helpers/CpfValidator';
-import cnpjMask from '../../../src/helpers/CnpjMask';
 import registrationNumberMask from '../../../src/helpers/RegistrationNumberMask';
 import ReactPhoneInput from 'react-phone-input-material-ui';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 import { TextareaAutosize } from '@mui/base/TextareaAutosize';
 
-const CreateTerrainsBasic = ({ 
+const CreatePropertyTitleBasic = ({ 
 	id, 
 	method = 'POST',
 	prop_number, 
@@ -44,10 +43,6 @@ const CreateTerrainsBasic = ({
 	prop_terrainArea,
 	prop_constructedArea,
 	prop_quality,
-  prop_reference,
-  prop_cnpj,
-  prop_value,
-  prop_reurb,
 	
 }) => {
 	const router = useRouter();
@@ -63,21 +58,17 @@ const CreateTerrainsBasic = ({
   const [rooms, setRooms] = useState(prop_rooms || null);
   const [roomsNotes, setRoomsNotes] = useState(prop_roomsNotes || null);
   const [isHouse, setIsHouse] = useState(prop_isHouse || false);
-  const [propertyType, setPropertyType] = useState(prop_propertyType || 'Residência');
+  const [propertyType, setPropertyType] = useState(prop_propertyType || 'Casa');
   const [floors, setFloors] = useState(prop_floors || 0);
   const [terrainArea, setTerrainArea] = useState(prop_terrainArea || 0);
   const [constructedArea, setConstructedArea] = useState(prop_constructedArea || 0);
   const [quality, setQuality] = useState(prop_quality || 'Regular');
   const [ownerCpf, setOwnerCpf] = useState(router.query.ownerCpf);
-  const [reference, setReference] = useState(prop_reference || '');
-  const [cnpj, setCnpj] = useState(prop_cnpj || null);
-  const [value, setValue] = useState(prop_value || null);
-  const [reurb, setReurb] = useState(prop_reurb || null);
+
  
   const [isFormSubmitted, setFormSubmitted]= useState(false);
   const [requestMethod, setMethod] = useState(method);
   const [isMarried, setMarried] = useState(false);
-  const [isCnpj, setIsCnpj] = useState(false);
   const [ownerAlreadyExists, setOwnerAlreadyExists] = useState(false);
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
@@ -100,9 +91,6 @@ const CreateTerrainsBasic = ({
 			terrain_area: terrainArea,
 			constructed_area: constructedArea,
 			quality: quality,
-      reference: reference,
-      cnpj: cnpj,
-      value: value,
   	}
   	// Usado pra triggar o useEffect
     setFormSubmitted(true);
@@ -111,16 +99,10 @@ const CreateTerrainsBasic = ({
         api
           .post('terrenos', terrain)
           .then((response) => {
-            // Se conseguir cadastrar o terreno cadastra os dados do reurb
-            console.log(ownerId);
-            let titulo = {
-              owner_id: ownerId,
-              terrain_id: response.data.id,
-              reurb_type: reurb,
-            }
-
-            sendPropertyTitleRequest(titulo);
-
+            router.push({
+              pathname: '/titulos',
+              query: { terrain_number: terrain.number },
+            });
           }).catch((error) => {
             console.log(error)
           })
@@ -140,20 +122,6 @@ const CreateTerrainsBasic = ({
     
   };
 
-  const sendPropertyTitleRequest = (titulo) => {
-
-      api
-      .post('titulos', titulo)
-      .then((response) => { 
-        router.push({
-          pathname: '/titulos',
-          // query: { terrain_number: terrain.number },
-        });
-        
-      }).catch((error) => {
-        console.log(error)
-      })
-  }
   const handleNumberChange = (e) => {
     setNumber(e.value);
   };
@@ -173,9 +141,6 @@ const CreateTerrainsBasic = ({
   const handleStreetChange = (e) => {
   	setStreetId(e.target.value);
   }
-  const handleReurbChange = (e) => {
-    setReurb(e.target.value);
-  }
 
   const handleTerrainAreaChange = (e) => {
   	setTerrainArea(e.value);
@@ -185,18 +150,11 @@ const CreateTerrainsBasic = ({
   const handlePropertyTypeChange = (e) => {
   	setPropertyType(e.target.value);
   	setIsHouse(true)
-  	if(e.target.value !== 'Residência'){
+  	if(e.target.value !== 'Casa'){
   		setIsHouse(false);
   	} else {
   		setIsHouse(true)
   	}
-
-    if(e.target.value !== 'Comércio'){
-      setIsCnpj(false);
-    } else {
-      setIsCnpj(true)
-    }
-
   	
   }
 
@@ -223,22 +181,9 @@ const CreateTerrainsBasic = ({
   	setQuality(e.target.value)
   }
 
-  const handleCnpjChange = (e) => {
-    if(e.target.value.length <= 18){
-      setCnpj(cnpjMask(e.target.value))  
-    }
-
-  }
-
-  const handleValueChange = (e) => {
-    console.log(e.value);
-    setValue(e.value);
-  }
-
   const nationalities = ['Brasileiro'];
-  const propertyTypes = ['Residência', 'Comércio', 'Serviço', 'Terreno', 'Outros']
-  const qualities = ['Precário', 'Regular', 'Bom', 'Luxo']
-  const reurbs = ['S', 'E']
+  const propertyTypes = ['Terreno', 'Casa', 'Comércio', 'Outro']
+  const qualities = ['Precário', 'Regular', 'Bom', 'Ótimo']
   
   const renderStreets = () => {
   	let streetsToRender = streets.map((street, index) => (
@@ -261,30 +206,26 @@ const CreateTerrainsBasic = ({
       return qualitiesToRender;
   }
 
-  const renderReurb = () => {
-    let reurbsToRender = reurbs.map((reurb, index) => 
-        (
-          <MenuItem key={index} value={reurb}>{reurb}</MenuItem>
-      ))
-      return reurbsToRender;
-  }
-
   const renderSubmitBtn = () => {
+  	if(ownerAlreadyExists){
   		return(
   			<Button type='submit' variant='contained' size='large'>
-              Finalizar cadastro
+              Prosseguir para dados do terreno 
             </Button>	  
-  		);            
+  		);
+  	} else {
+  		return (
+  			<Button type='submit' variant='contained' size='large'>
+              Cadastrar Proprietário
+            </Button>
+		)
+  	}
+                
   }
 
   const handleClose = () => {setOpenSnackbar(false)}
   
   useEffect(() => {
-    if(!router.query.ownerCpf && !router.query.ownerId){
-      router.push({
-          pathname: '/proprietarios/buscar/',
-        });
-    }
         const getStreets = () => {
         api
           .get('ruas/')
@@ -295,12 +236,12 @@ const CreateTerrainsBasic = ({
       }
       getStreets();
       setOwnerCpf(router.query.ownerCpf);
-      setOwnerId(router.query.ownerId)
+      console.log(router);
   }, []);
 
   return (
     <Card>
-      <CardHeader title='Dados do Terreno' titleTypographyProps={{ variant: 'h6' }}/>
+      <CardHeader title='Dados do Reurb' titleTypographyProps={{ variant: 'h6' }}/>
       <CardContent>
         <form onSubmit={handleSubmit}>
           <Grid container spacing={5}>
@@ -356,7 +297,7 @@ const CreateTerrainsBasic = ({
                   {renderQualities()}
                 </Select>
             </Grid>
-            <Grid item xs={4}>
+            <Grid item xs={12}>
             <InputLabel>CPF do Proprietário:</InputLabel>
               <TextField 
 	              fullWidth 
@@ -364,17 +305,8 @@ const CreateTerrainsBasic = ({
 	              value={ownerCpf}
               />
             </Grid>
-            <Grid item xs={8}>
-            <InputLabel>Ponto de Referência:</InputLabel>
-              <TextField 
-                fullWidth 
-                label='' 
-                onChange={(e) => setReference(e.target.value)}
-                value={reference}
-              />
-            </Grid>
+            
             <Grid item xs={3}>
-            <InputLabel>Rua*:</InputLabel>
                 <Select
                   label='Rua'
                   required
@@ -390,7 +322,6 @@ const CreateTerrainsBasic = ({
                 </Select>
             </Grid>
             <Grid item xs={3}>
-            <InputLabel>Tipo*:</InputLabel>
                 <Select
                   label='Tipo de Imóvel'
                   required
@@ -406,21 +337,20 @@ const CreateTerrainsBasic = ({
                 </Select>
             </Grid>
             <Grid item xs={2}>
-              <InputLabel>Quadra*:</InputLabel>
                 <TextField 
 	              fullWidth 
 	              required
+	              label='Quadra' 
 	              placeholder='Ex: RC10' 
 	              onChange={(e) => setBlock(e.target.value)}
 	              value={block}
 	              />
             </Grid>
             <Grid item xs={2}>
-              <InputLabel>Nº de Pavimentos*:</InputLabel>
                 <NumericFormat 
                   customInput={TextField}
                   fullWidth
-                  label=''
+                  label='Nº Pavimentos'
                   decimalScale={0}
                   required
                   placeholder='Somente números'
@@ -431,11 +361,10 @@ const CreateTerrainsBasic = ({
               	/>
             </Grid>
             <Grid item xs={2}>
-              <InputLabel>Cômodos*:</InputLabel>
                 <NumericFormat 
                   customInput={TextField}
                   fullWidth
-                  label=''
+                  label='Cômodos'
                   decimalScale={0}
                   required
                   placeholder='Somente números'
@@ -460,11 +389,11 @@ const CreateTerrainsBasic = ({
 		              value={roomsNotes}
 		              />
 		            </Grid>
-		            <Grid item xs={2}>
+		            <Grid item xs={6}>
 		              <NumericFormat 
 	                  customInput={TextField}
 	                  fullWidth
-	                  label='Área do terreno m²'
+	                  label='Área do terreno em metros quadrados'
 	                  decimalScale={2}
 	                  required
 	                  allowNegative={false}
@@ -474,11 +403,11 @@ const CreateTerrainsBasic = ({
 	              	/>
 		            </Grid>
 
-		            <Grid item xs={2}>
+		            <Grid item xs={6}>
 		              <NumericFormat 
 	                  customInput={TextField}
 	                  fullWidth
-	                  label='Área construída m²'
+	                  label='Área construída em metros quadrados'
 	                  decimalScale={2}
 	                  required
 	                  allowNegative={false}
@@ -487,47 +416,7 @@ const CreateTerrainsBasic = ({
 	                  value={constructedArea}
 	              	/>
 		            </Grid>
-                <Grid item xs={3}>
-                  <NumericFormat 
-                    customInput={TextField}
-                    fullWidth
-                    label='Valor Venal'
-                    decimalScale={2}
-                    required
-                    prefix='R$ '
-                    allowNegative={false}
-                    allowLeadingZeros={false}
-                    onValueChange={handleValueChange}
-                    value={value}
-                  />
-                </Grid>
-                <Grid item xs={2}>
-                    <Select
-                      label='Tipo de Reurb'
-                      required
-                      fullWidth
-                      displayEmpty={true}
-                      renderValue={reurb => reurb?.length ? Array.isArray(reurb) ? reurb.join(', ') : reurb : 'Tipo Reurb*'}
-                      id='form-layouts-separator-select-civil_state'
-                      labelId='form-layouts-separator-select-label-civil_state'
-                      onChange={handleReurbChange}
-                      value={reurb} 
-                    >
-                      {renderReurb()}
-                    </Select>
-                </Grid>
-                {isCnpj && 
-                  <Grid item xs={3}>
-                    <TextField 
-                    fullWidth 
-                    minRows={3}
-                    label='CNPJ' 
-                    placeholder='00.000.000/0001-00' 
-                    onChange={handleCnpjChange}
-                    value={cnpj}
-                    />
-                  </Grid>
-                }
+
 		           </Grid>
               </FormControl>
 			</Grid>
@@ -563,4 +452,4 @@ const CreateTerrainsBasic = ({
   )
 }
 
-export default CreateTerrainsBasic
+export default CreatePropertyTitleBasic

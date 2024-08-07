@@ -155,7 +155,7 @@ const CreateOwnerBasic = ({
 	          .then((response) => {
 	            router.push({
 	              pathname: '/terrenos/novo',
-	              query: { ownerCpf: ownerCpf },
+	              query: { ownerCpf: ownerCpf , ownerId: ownerId},
 	            });
 	          }).catch((error) => {
 	            console.log(error)
