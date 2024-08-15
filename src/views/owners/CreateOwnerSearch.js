@@ -69,13 +69,11 @@ const CreateOwnerSearch = ({ cpf }) => {
 
   return (
     <Card>
-      
       <CardTitle title={'Informe o CPF'} />
-      
       <CardContent>
         <form onSubmit={handleSubmit}>
           <Grid container spacing={5}>
-            <Grid item xs={9}>
+            <Grid item xs={12}>
               <TextField 
               fullWidth 
               required

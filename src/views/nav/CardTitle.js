@@ -11,7 +11,7 @@ import Button from '@mui/material/Button'
 
 const CardTitle = ({title}) => {
   const router = useRouter();
-  const [apiToken, setApiToken] = useState(localStorage.token);
+  const [apiToken, setApiToken] = useState(null);
 
   const handleLogout = () => {
     const requestConfig = {headers: { Authorization: `Bearer ${apiToken}` }}
@@ -25,12 +25,17 @@ const CardTitle = ({title}) => {
         console.log(error)
       })
   }
+  useEffect(() => {
+    if(window !== 'undefined'){ 
+        setApiToken(localStorage.getItem('token'));
+      }
+  }, [apiToken])
   return (
-    <Grid container spacing={3} mt={1}>
-        <Grid item xs={8}>
+    <Grid container spacing={9} mt={0}>
+        <Grid item xs={9}>
           <CardHeader title={title} titleTypographyProps={{ variant: 'h6' }}/>
         </Grid>
-        <Grid item xs={3}>
+        <Grid item xs={2}>
           <Button 
             type='submit' 
             variant='outlined' 

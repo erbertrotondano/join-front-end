@@ -147,7 +147,7 @@ const CreateTerrainsBasic = ({
       .post('titulos', titulo, requestConfig)
       .then((response) => { 
         router.push({
-          pathname: '/proprietarios/buscar',
+          pathname: '/anexos/novo',
           // query: { terrain_number: terrain.number },
         });
         
