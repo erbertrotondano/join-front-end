@@ -26,6 +26,7 @@ import ReactPhoneInput from 'react-phone-input-material-ui';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 import { TextareaAutosize } from '@mui/base/TextareaAutosize';
+import CardTitle from '../../../src/views/nav/CardTitle';
 
 const CreateTerrainsBasic = ({ 
 	id, 
@@ -53,7 +54,7 @@ const CreateTerrainsBasic = ({
 	const router = useRouter();
 
   // States
-  const [number, setNumber] = useState(prop_number || null);
+  const [number, setNumber] = useState(prop_number || '');
   const [doorNumber, setDoorNumber] = useState(prop_doorNumber || null);
   const [registrationNumber, setRegistrationNumber] = useState(prop_registrationNumber || null);
   const [ownerId, setOwnerId] = useState(prop_ownerId || null);
@@ -72,7 +73,7 @@ const CreateTerrainsBasic = ({
   const [reference, setReference] = useState(prop_reference || '');
   const [cnpj, setCnpj] = useState(prop_cnpj || null);
   const [value, setValue] = useState(prop_value || null);
-  const [reurb, setReurb] = useState(prop_reurb || null);
+  const [reurb, setReurb] = useState(prop_reurb || 'S');
  
   const [isFormSubmitted, setFormSubmitted]= useState(false);
   const [requestMethod, setMethod] = useState(method);
@@ -81,6 +82,7 @@ const CreateTerrainsBasic = ({
   const [ownerAlreadyExists, setOwnerAlreadyExists] = useState(false);
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
+  const [apiToken, setApiToken] = useState(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -107,9 +109,10 @@ const CreateTerrainsBasic = ({
   	// Usado pra triggar o useEffect
     setFormSubmitted(true);
     // HTTP stuff
+    const requestConfig = {headers: { Authorization: `Bearer ${apiToken}` }}
     if(requestMethod === 'POST'){
         api
-          .post('terrenos', terrain)
+          .post('terrenos', terrain, requestConfig)
           .then((response) => {
             // Se conseguir cadastrar o terreno cadastra os dados do reurb
             console.log(ownerId);
@@ -126,12 +129,9 @@ const CreateTerrainsBasic = ({
           })
       } else if(requestMethod === 'PUT'){
         api
-          .put(`terrenos/${ownerId}`, terrain)
+          .put(`terrenos/${ownerId}`, terrain, requestConfig)
           .then((response) => {
-            // router.push({
-            //   pathname: '/products',
-            //   // query: { isProductRecentlyUpdated: true },
-            // });
+            // TODO
           }).catch((error) => {
             console.log(error)
           })
@@ -142,11 +142,12 @@ const CreateTerrainsBasic = ({
 
   const sendPropertyTitleRequest = (titulo) => {
 
+      const requestConfig = {headers: { Authorization: `Bearer ${apiToken}` }}
       api
-      .post('titulos', titulo)
+      .post('titulos', titulo, requestConfig)
       .then((response) => { 
         router.push({
-          pathname: '/titulos',
+          pathname: '/proprietarios/buscar',
           // query: { terrain_number: terrain.number },
         });
         
@@ -280,27 +281,27 @@ const CreateTerrainsBasic = ({
   const handleClose = () => {setOpenSnackbar(false)}
   
   useEffect(() => {
-    if(!router.query.ownerCpf && !router.query.ownerId){
-      router.push({
-          pathname: '/proprietarios/buscar/',
-        });
+    if(window !== 'undefined'){ 
+      console.log('setting api token')
+      setApiToken(localStorage.getItem('token'));
     }
-        const getStreets = () => {
-        api
-          .get('ruas/')
-          .then((response) => { 
-            setStreets(response.data) 
-          })
-          .catch((err) => { console.error('Aconteceu alguma coisa', err) })
-      }
-      getStreets();
-      setOwnerCpf(router.query.ownerCpf);
-      setOwnerId(router.query.ownerId)
-  }, []);
+    const getStreets = () => {
+    const requestConfig = {headers: { Authorization: `Bearer ${apiToken}` }}
+    api
+      .get('ruas/', requestConfig)
+      .then((response) => { 
+        setStreets(response.data) 
+      })
+      .catch((err) => { console.error('Aconteceu alguma coisa', err) })
+    }
+    getStreets();
+    setOwnerCpf(router.query.ownerCpf);
+    setOwnerId(router.query.ownerId)
+  }, [apiToken]);
 
   return (
     <Card>
-      <CardHeader title='Dados do Terreno' titleTypographyProps={{ variant: 'h6' }}/>
+      <CardTitle title={'Dados do Terreno'} /> 
       <CardContent>
         <form onSubmit={handleSubmit}>
           <Grid container spacing={5}>
@@ -406,17 +407,18 @@ const CreateTerrainsBasic = ({
                 </Select>
             </Grid>
             <Grid item xs={2}>
-              <InputLabel>Quadra*:</InputLabel>
+              <InputLabel>Quadra:</InputLabel>
                 <TextField 
 	              fullWidth 
 	              required
+	              label='Quadra' 
 	              placeholder='Ex: RC10' 
 	              onChange={(e) => setBlock(e.target.value)}
 	              value={block}
 	              />
             </Grid>
             <Grid item xs={2}>
-              <InputLabel>Nº de Pavimentos*:</InputLabel>
+              <InputLabel>Nº de Pavimentos:</InputLabel>
                 <NumericFormat 
                   customInput={TextField}
                   fullWidth
@@ -431,7 +433,7 @@ const CreateTerrainsBasic = ({
               	/>
             </Grid>
             <Grid item xs={2}>
-              <InputLabel>Cômodos*:</InputLabel>
+              <InputLabel>Cômodos:</InputLabel>
                 <NumericFormat 
                   customInput={TextField}
                   fullWidth

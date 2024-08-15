@@ -23,6 +23,7 @@ import isCpfValid from '../../../src/helpers/CpfValidator';
 import ReactPhoneInput from 'react-phone-input-material-ui';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
+import CardTitle from '../../../src/views/nav/CardTitle';
 
 const CreateOwnerBasic = ({ 
 	id, 
@@ -76,6 +77,7 @@ const CreateOwnerBasic = ({
   const [isMarried, setMarried] = useState(false);
   const [ownerAlreadyExists, setOwnerAlreadyExists] = useState(false);
   const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [apiToken, setApiToken] = useState(null);
 
 
   const router = useRouter();
@@ -134,11 +136,12 @@ const CreateOwnerBasic = ({
 				husband_father_name: husbandFathersName,
 				husband_nationality:selectedHusbandNationality, 
 	    }
-    
+    	
 	    // HTTP stuff
+	    const requestConfig = {headers: { Authorization: `Bearer ${apiToken}` }}
 	    if(requestMethod === 'POST'){
 	        api
-	          .post('proprietarios', owner)
+	          .post('proprietarios', owner, requestConfig)
 	          .then((response) => {
 	          	console.log(123, owner)
 	            router.push({
@@ -151,7 +154,7 @@ const CreateOwnerBasic = ({
 	          })
 	      } else if(requestMethod === 'PUT'){
 	        api
-	          .put(`proprietarios/${ownerId}`, owner)
+	          .put(`proprietarios/${ownerId}`, owner, requestConfig)
 	          .then((response) => {
 	            router.push({
 	              pathname: '/terrenos/novo',
@@ -238,26 +241,31 @@ const CreateOwnerBasic = ({
   const handleClose = () => {setOpenSnackbar(false)}
   
   useEffect(() => {
-        const getOwnerData = (owner_id) => {
-        api
-          .get('proprietarios/'+owner_id)
-          .then((response) => { 
-            setOwner(response.data) 
-          })
-          .catch((err) => { console.error('Aconteceu alguma coisa', err) })
-      }
-      if(router.query.owner_id){
-      	setOwnerId(router.query.owner_id);
-      	getOwnerData(router.query.owner_id);
-      } else {
-      	setCpf(router.query.owner_cpf)
-      }
+  	if(window !== 'undefined'){ 
+      console.log('setting api token')
+      setApiToken(localStorage.getItem('token'));
+    }
+	  const getOwnerData = (owner_id) => {
+		const requestConfig = {headers: { Authorization: `Bearer ${apiToken}` }}
+	  api
+	    .get('proprietarios/'+owner_id, requestConfig)
+	    .then((response) => { 
+	      setOwner(response.data) 
+	    })
+	    .catch((err) => { console.error('Aconteceu alguma coisa', err) })
+		}
+		if(router.query.owner_id){
+			setOwnerId(router.query.owner_id);
+			getOwnerData(router.query.owner_id);
+		} else {
+			setCpf(router.query.owner_cpf)
+		}
       
-  }, []);
+  }, [apiToken]);
 
   return (
     <Card>
-      <CardHeader title='Cadastrando Proprietário' titleTypographyProps={{ variant: 'h6' }}/>
+      <CardTitle title={'Cadastrando Proprietário'} /> 
       <CardContent>
         <form onSubmit={handleSubmit}>
           <Grid container spacing={5}>

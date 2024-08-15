@@ -19,11 +19,13 @@ import MenuItem from '@mui/material/MenuItem'
 import { NumericFormat } from 'react-number-format';
 import cpfMask from '../../../src/helpers/CpfMask';
 import isCpfValid from '../../../src/helpers/CpfValidator';
+import CardTitle from '../../../src/views/nav/CardTitle';
 
 const CreateOwnerSearch = ({ cpf }) => {
   // States
   const [ownerCpf, setCpf] = useState(cpf || '');
   const [enableSubmit, setEnableSubmit] = useState(false);
+  const [apiToken, setApiToken] = useState(null);
   const router = useRouter();
 
   const handleSubmit = async (e) => {
@@ -34,8 +36,9 @@ const CreateOwnerSearch = ({ cpf }) => {
     }
 
     // HTTP stuff
+    const requestConfig = {headers: { Authorization: `Bearer ${apiToken}` }}
     api
-      .post('proprietarios/por-cpf', owner)
+      .post('proprietarios/por-cpf', owner, requestConfig)
       .then((response) => {
       	let owner = response.data
         router.push({
@@ -56,9 +59,19 @@ const CreateOwnerSearch = ({ cpf }) => {
     }
   };
 
+  useEffect(() => {
+   if(window !== 'undefined'){ 
+      console.log('setting api token')
+      setApiToken(localStorage.getItem('token'));
+    }
+
+  }, []);
+
   return (
     <Card>
-      <CardHeader title='Informe o CPF' titleTypographyProps={{ variant: 'h6' }}/>
+      
+      <CardTitle title={'Informe o CPF'} />
+      
       <CardContent>
         <form onSubmit={handleSubmit}>
           <Grid container spacing={5}>
