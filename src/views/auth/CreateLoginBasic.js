@@ -85,6 +85,10 @@ const CreateLoginBasic = ({
         
       }).catch((error) => {
         console.log(error)
+        if(error.response.status == 422){
+          setErrorMsg('Email ou senha inválidos')
+          setOpenSnackbar(true)
+        }
       })
   };
 
