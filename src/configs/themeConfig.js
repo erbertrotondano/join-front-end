@@ -1,6 +1,6 @@
 const themeConfig = {
   // ** Layout Configs
-  templateName: 'Materio' /* App Name */,
+  templateName: 'Reurb' /* App Name */,
   mode: 'dark' /* light | dark */,
   contentWidth: 'boxed' /* full | boxed */,
   // ** Routing Configs

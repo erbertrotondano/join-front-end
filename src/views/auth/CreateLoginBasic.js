@@ -26,6 +26,7 @@ import ReactPhoneInput from 'react-phone-input-material-ui';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 import { TextareaAutosize } from '@mui/base/TextareaAutosize';
+import Divider from '@mui/material/Divider';
 
 const CreateLoginBasic = ({ 
 	id, 
@@ -110,14 +111,41 @@ const CreateLoginBasic = ({
   }, []);
 
   return (
+    <Grid
+        container
+        spacing={0}
+        direction="column"
+        alignItems="center"
+        justifyContent="center"
+
+      >
     <Card>
+      <Grid container spacing={9} mt={0}>
+        <Grid item xs={2} ml={5} style={{textAlign: 'left'}}>
+            <img
+            height={60}
+            // TODO: Atualizar LOGO
+            src='https://images.unsplash.com/photo-1551963831-b3b1ca40c98e'
+            alt={'teste'}
+            loading="lazy" />
+        </Grid>
+        
+        <Grid item xs={9} style={{textAlign: 'center'}}>
+            <CardHeader title={'REURB - Sistema de formulário'} titleTypographyProps={{ variant: 'h6' }}/>
+        </Grid>
+      </Grid>
+      <Divider />
       <CardHeader title='Login' titleTypographyProps={{ variant: 'h6' }}/>
       <CardContent>
         <form onSubmit={handleSubmit}>
-          <Grid container spacing={6}>
+          <Grid 
+          direction="column"
+        alignItems="center"
+        justifyContent="center"
+          container spacing={6}>
             <Grid item xs={12}>
               <FormControl fullWidth>
-              <Grid item xs={6}>
+              <Grid item xs={12}>
                 <TextField 
                   fullWidth 
                   required
@@ -126,7 +154,7 @@ const CreateLoginBasic = ({
                   value={email}
                 />
               </Grid>
-              <Grid item xs={6} mt={2}>
+              <Grid item xs={12} mt={2}>
                 <TextField 
                   fullWidth 
                   required
@@ -167,6 +195,7 @@ const CreateLoginBasic = ({
         	</MuiAlert>
 			</Snackbar>
     </Card>
+    </Grid>
   )
 }
 

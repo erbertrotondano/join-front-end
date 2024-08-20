@@ -8,6 +8,7 @@ import CardHeader from '@mui/material/CardHeader'
 import CardContent from '@mui/material/CardContent'
 import Grid from '@mui/material/Grid'
 import Button from '@mui/material/Button'
+import Divider from '@mui/material/Divider';
 
 const CardTitle = ({title}) => {
   const router = useRouter();
@@ -31,11 +32,21 @@ const CardTitle = ({title}) => {
       }
   }, [apiToken])
   return (
-    <Grid container spacing={9} mt={0}>
-        <Grid item xs={9}>
-          <CardHeader title={title} titleTypographyProps={{ variant: 'h6' }}/>
+    <Grid>
+      <Grid container spacing={9} mt={0}>
+        <Grid item xs={4} ml={5} style={{textAlign: 'left'}}>
+            <img
+            height={60}
+            // TODO: Atualizar LOGO
+            src='https://images.unsplash.com/photo-1551963831-b3b1ca40c98e'
+            alt={'teste'}
+            loading="lazy" />
         </Grid>
-        <Grid item xs={2}>
+        
+        <Grid item xs={4} style={{textAlign: 'center'}}>
+            <CardHeader title={'REURB - Sistema de formulário'} titleTypographyProps={{ variant: 'h6' }}/>
+        </Grid>
+        <Grid item xs={3} style={{textAlign: 'right'}}>
           <Button 
             type='submit' 
             variant='outlined' 
@@ -47,6 +58,14 @@ const CardTitle = ({title}) => {
           </Button>
         </Grid>
       </Grid>
+      <Divider />
+      <Grid container>
+        <Grid item xs={9}>
+          <CardHeader title={title} titleTypographyProps={{ variant: 'h6' }}/>
+        </Grid>
+      </Grid>
+
+    </Grid>
   )
 }
 
