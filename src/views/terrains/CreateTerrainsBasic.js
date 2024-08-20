@@ -148,9 +148,9 @@ const CreateTerrainsBasic = ({
       .then((response) => { 
         router.push({
           pathname: '/anexos/novo',
-          // query: { terrain_number: terrain.number },
+          query: { propertyTitleId: response.data.id },
         });
-        
+        console.log(response);
       }).catch((error) => {
         console.log(error)
       })
