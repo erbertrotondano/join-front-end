@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "http://0.0.0.0/api/",
+  baseURL: "https://reurb-backend-autumn-haze-6365.fly.dev/",
 });
 
 export default api;
