@@ -92,7 +92,7 @@ const DefaultPalette = (mode, themeColor) => {
     background: {
       paper: mode === 'light' ? '#FFF' : '#4743ffc7',
       // default: mode === 'light' ? '#F4F5FA' : '#212031'
-      default: mode === 'light' ? '#F4F5FA' : '#a19fb6'
+      default: mode === 'light' ? '#F4F5FA' : '#0e0d1d'
     },
     action: {
       active: `rgba(${mainColor}, 0.54)`,

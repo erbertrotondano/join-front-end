@@ -125,7 +125,7 @@ const CreateLoginBasic = ({
             <img
             height={60}
             // TODO: Atualizar LOGO
-            src='https://images.unsplash.com/photo-1551963831-b3b1ca40c98e'
+            src='../images/itaranalogo.png'
             alt={'teste'}
             loading="lazy" />
         </Grid>
