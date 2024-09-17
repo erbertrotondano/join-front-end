@@ -49,7 +49,7 @@ const CardTitle = ({title}) => {
         <Grid item xs={3} style={{textAlign: 'right'}}>
           <Button 
             type='submit' 
-            variant='outlined' 
+            variant='contained' 
             color='error' 
             size='large'
             onClick={handleLogout}
@@ -58,7 +58,7 @@ const CardTitle = ({title}) => {
           </Button>
         </Grid>
       </Grid>
-      <Divider />
+      <Divider style={{backgroundColor: '#a18341'}}/>
       <Grid container>
         <Grid item xs={9}>
           <CardHeader title={title} titleTypographyProps={{ variant: 'h6' }}/>

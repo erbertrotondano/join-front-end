@@ -134,7 +134,7 @@ const CreateLoginBasic = ({
             <CardHeader title={'REURB - Sistema de formulário'} titleTypographyProps={{ variant: 'h6' }}/>
         </Grid>
       </Grid>
-      <Divider />
+      <Divider style={{backgroundColor: '#a18341'}}/>
       <CardHeader title='Login' titleTypographyProps={{ variant: 'h6' }}/>
       <CardContent>
         <form onSubmit={handleSubmit}>
